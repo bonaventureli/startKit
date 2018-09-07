@@ -1,0 +1,74 @@
+Renesas Optimizing Linker (V2.06.00 )             06-Sep-2018 13:50:51
+
+*** Options ***
+
+-subcommand=DefaultBuild\startKit.clnk
+-input=DefaultBuild\main.obj
+-input=DefaultBuild\Task2.obj
+-input=DefaultBuild\Task1.obj
+-input=DefaultBuild\rlin3_api.obj
+-input=DefaultBuild\rlin3_as.obj
+-input=DefaultBuild\rlin3_p.obj
+-input=DefaultBuild\standardports_p.obj
+-input=DefaultBuild\map_rlin3_irq.obj
+-input=DefaultBuild\LinTask.obj
+-input=DefaultBuild\BspDataFlash.obj
+-input=DefaultBuild\BspTimer.obj
+-input=DefaultBuild\can_table.obj
+-input=DefaultBuild\Mslcan.obj
+-input=DefaultBuild\rscan.obj
+-input=DefaultBuild\Kit1.obj
+-input=DefaultBuild\Uart33.obj
+-input=DefaultBuild\BspWatchDog.obj
+-input=DefaultBuild\ostm0.obj
+-input=DefaultBuild\boot.obj
+-input=DefaultBuild\cstart.obj
+-input=DefaultBuild\r_clock.obj
+-input=DefaultBuild\r_interrupt.obj
+-input=DefaultBuild\Bllcan.obj
+-input=DefaultBuild\UserSys.obj
+-input=DefaultBuild\Uart30.obj
+-input=DefaultBuild\TaskCAN.obj
+-input=DefaultBuild\TaskUART.obj
+-input=DefaultBuild\TaskTIME.obj
+-input=DefaultBuild\TaskOSTIME.obj
+-debug
+-nocompress
+-output=DefaultBuild\startKit.abs
+-library=v850e3v5\rhs8n.lib
+-library=v850e3v5\libmalloc.lib
+-list=DefaultBuild\startKit.map
+-start=RESET,EIINTTBL/0,.const,.INIT_DSEC.const,.INIT_BSEC.const,FACI_RAM_CODE.text,.text,.data/00008000,.data.R,.bss,.stack.bss/FEDFC000
+-rom=.data=.data.R
+-memory=high
+-nologo
+-end
+
+*** Error information ***
+
+W0561100:Cannot find "FACI_RAM_CODE.text" specified in option "start"
+
+*** Mapping List ***
+
+SECTION                            START      END         SIZE   ALIGN
+
+RESET
+                                  00000000  000001f7       1f8   200
+EIINTTBL
+                                  00000200  0000067f       480   200
+.const
+                                  00008000  00008403       404   4
+.INIT_DSEC.const
+                                  00008404  0000840f         c   4
+.INIT_BSEC.const
+                                  00008410  00008417         8   4
+.text
+                                  00008418  0000d69b      5284   2
+.data
+                                  0000d69c  0000d884       1e9   4
+.data.R
+                                  fedfc000  fedfc1e8       1e9   4
+.bss
+                                  fedfc1ec  fedfcadf       8f4   4
+.stack.bss
+                                  fedfcae0  fedfccdf       200   4
