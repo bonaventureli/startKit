@@ -5,7 +5,6 @@ uint8_t gUartDatabufferTaskUART[UART_REC_DATA_LEN];
 
 void TaskUART(void)
 {
-	uint8_t tmpdate=0x12;
 	#if DRIVERUART0
 	uint8_t gUart0FrameLen;
 	#elif DRIVERUART3
@@ -36,7 +35,6 @@ void TaskUART(void)
 	#elif DRIVERUART3
 	
 		if(gUart3FrameLen ){
-		Uart3Sent(&tmpdate,1);
 		Uart3Sent(gUartDatabufferTaskUART,gUart3FrameLen);
 	}
 	#endif
