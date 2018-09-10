@@ -55,4 +55,5 @@ ingeek_ble_server.h
 在git的平台上不断跟新这两个文件
 如果工程中只是跟新了一两个文件，如何在一个版中同时查看不同版本的文件？
 是否是通过增加tag
+git tag -a 0.1 -m "update tag"
 git push origin --tags
