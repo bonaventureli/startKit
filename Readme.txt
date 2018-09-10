@@ -1,6 +1,6 @@
 <<<<<<< HEAD
 
-version:0.1
+version:0.2
 date:2018/9/10
 目的：
 熟练芯片的所有功能
@@ -40,4 +40,5 @@ version:0.1
 >>>>>>> 3b655209f79f94c3afebd3d0dedc692e493d90f9
 CAN0测试收发数据正常
 UART测试收发数据正常
+version :0.2
 
