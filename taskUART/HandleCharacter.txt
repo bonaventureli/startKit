@@ -1,0 +1,51 @@
+本文档说明：
+目的：
+方便所有潜入开发过程中用到的串口协议提供应用层
+时间：
+预计花费时间：2小时
+此文档花费时间
+2018年9月10
+9：00-
+有效期：长期
+
+考虑到在很多场合会使用到串口协议，根据项目不同，定义的串口协议也不相同，此文档是应用层，可以移植到不同的平台使用。
+思路：一帧数据有多个字节和不同的定义，使用一个数据结构定义帧，数据负载部分因为字节大小是变动的，所以在外部定义一个固定200字节的数组，
+结构体中定义一个指针和长度，在使用数据的时候，指针指向数组，长度用户自定义。这样就只需要定义一个结构体。
+在数据解析中,有两种情况：
+一，比如帧头是固定的，只有符合与不符合两种情况，所以计算机使用if判断即可。
+二，比如操作码是变动的，会出现多种数据，所以计算机使用switch-case判断即可。
+在分支中还会出现多种分支情况，所有if和case结合使用。
+优秀算法：无
+移植性：可移植
+
+
+程序员和计算机沟通部分
+
+
+void Handle_info(uint8_t *pdata,uint32_t loadlen);
+void Handle_auth(uint8_t *pdata,uint32_t loadlen);
+void Handle_session(uint8_t *pdata,uint32_t loadlen);
+void Handle_cmd(uint8_t *pdata,uint32_t loadlen);
+void Handle_ble_unconnect(void);
+void Handle_ble_connect(void);
+void Handle_ble_broadcast(void);
+
+7个接口，根据需求做不同的实现。
+typedef struct{
+	uint8_t  Header;
+	uint8_t  Address;
+	uint16_t Operate;
+	uint16_t UUID;
+	uint8_t  Datalength;
+	uint8_t  *pdataload;
+	uint32_t dataload_len;
+	uint16_t FCS;
+} T_UartFrame;
+
+结构体
+类型说明符：
+结构名：无
+成员列表：
+
+备注：由于时间关系，细节部分有时间在跟新，在写此文档之前，要预估编写那些那些内容，花费多少时间，目的是什么，
+

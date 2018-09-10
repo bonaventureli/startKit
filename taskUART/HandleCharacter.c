@@ -26,6 +26,13 @@ typedef struct{
 } T_UartFrame;
 
 uint8_t dataload[200];
+void Handle_info(uint8_t *pdata,uint32_t loadlen);
+void Handle_auth(uint8_t *pdata,uint32_t loadlen);
+void Handle_session(uint8_t *pdata,uint32_t loadlen);
+void Handle_cmd(uint8_t *pdata,uint32_t loadlen);
+void Handle_ble_unconnect(void);
+void Handle_ble_connect(void);
+void Handle_ble_broadcast(void);
 
 uint8_t Handle_Character(uint8_t *Data, uint32_t frame_len){
 
@@ -81,10 +88,24 @@ uint8_t Handle_Character(uint8_t *Data, uint32_t frame_len){
 	}
 }
 
-void Handle_info(uint8_t *pdata,uint32_t loadlen);
-void Handle_auth(uint8_t *pdata,uint32_t loadlen);
-void Handle_session(uint8_t *pdata,uint32_t loadlen);
-void Handle_cmd(uint8_t *pdata,uint32_t loadlen);
-void Handle_ble_unconnect(void);
-void Handle_ble_connect(void);
-void Handle_ble_broadcast(void);
+Handle_info(uint8_t *pdata,uint32_t loadlen){
+	
+}
+Handle_auth(uint8_t *pdata,uint32_t loadlen){
+	
+}
+Handle_session(uint8_t *pdata,uint32_t loadlen){
+	
+}
+Handle_cmd(uint8_t *pdata,uint32_t loadlen){
+	
+}
+Handle_ble_unconnect(void){
+	
+}
+Handle_ble_connect(void){
+	
+}
+Handle_ble_broadcast(void){
+	
+}
