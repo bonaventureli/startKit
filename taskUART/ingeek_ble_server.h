@@ -1,7 +1,7 @@
 #ifndef INGEEK_BLE_SERVER_H
 #define INGEEK_BLE_SERVER_H
 //auth andy
-
+/*version 0.1*/
 #ifdef __cplusplus
 extern "C"
 {
