@@ -1,8 +1,8 @@
 /******************************************************************************
 ** Filename:    rscan.c
 ** Description: This files is the Driver of CAN Bus in communication.
-** Author:  Huangtingxuan
-** Date: 2018.8.3
+** Author:  andy
+** Date: 2018.9.10
 ** Copyright (c) by ShangHai Ingeek Information Technology Co.Ltd
 ******************************************************************************/
 //============================================================================
