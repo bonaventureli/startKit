@@ -1,35 +1,97 @@
 /******************************************************************************
-** Filename:    rscan.c
-** Description: This files is the Driver of CAN Bus in communication.
-** Author:  andy
-** Date: 2018.9.10
-** Copyright (c) by ShangHai Ingeek Information Technology Co.Ltd
-******************************************************************************/
-//============================================================================
-//
-// Source file for the RS CAN
-//
-//============================================================================
-/*============================================================================
-//  PIN Define:
+
+* file Name : rscan.c
+
+* version   : 0.3
+
+* Argument  : andy
+
+* data  : 2018/8/24
+
+* describe: 
+
+*PIN Define:
+
 	CAN1	CAN0_TX 		P0_0  2nd Alternative
+
 	CAN1 	CAN0_RX 		P0_1  2nd Alternative
+
    
-	CAN2 	CAN1_TX     P10_7 4th Alternative
+
+	CAN2 	CAN1_TX     		P10_7 4th Alternative
+
 	CAN2	CAN1_RX			P10_6 4th Alternative
-	
-	CAN3  CAN2_TX     P0_4 
-	CAN3  CAN2_RX     P0_5  
+
 	Baud Rate: 500Kbps
+
+
+
+	CAN0
+
+	0010 2th output P0_0   CAN0TX
+
+	0011 2th input  P0_1   CAN0RX
+
+	0011 2th input  P10_0  CAN0RX
+
+	0010 2th output P10_1  CAN0TX
+
+
+
+	CAN1
+
+	0110 4th output P10_7  CAN1TX
+
+	0111 4th input  P10_6  CAN1RX
+
+
+
+	CAN2
+
+	0000 1st output P0_4   CAN2TX
+
+	0001 1st input  P0_5   CAN2RX
+
+
+
+
+
+
+
+	PFCAEn_m 	PFCEn_m 	PFCn_m 	PMn_m 	Function
+
+	0 		0 		0 	1 	1st alternative function / Input
+
+	0 		0 		0 	0 	1st alternative function / Output
+
+	0 		0 		1 	1 	2nd alternative function / Input
+
+	0 		0 		1 	0 	2nd alternative function / Output
+
+	0 		1 		0 	1 	3rd alternative function / Input
+
+	0 		1 		0 	0 	3rd alternative function / Output
+
+	0 		1 		1 	1 	4th alternative function / Input
+
+	0 		1 		1 	0 	4th alternative function / Output
+
+	1 		0 		0 	1 	5th alternative function / Input
+
+	1 		0 		0 	0 	5th alternative function / Output
+
+	1 		0 		1 	X 	Setting prohibited
+
+	1 		1 		X 	X 	Setting prohibited
+
 	
-//============================================================================
-//==========================================================================*/
-// Includes
-//============================================================================
+
+******************************************************************************/
+
 #include  "r_typedefs.h"
 #include  "iodefine.h"
-#include 	"rscan.h"
-#include 	"can_table.h"
+#include  "rscan.h"
+#include  "can_table.h"
 
 /******************************************************************************
 Imported global variables and functions (from other files)
@@ -135,6 +197,140 @@ void CanPinConfigB(void)
 	PM0 |= 1<<5;
 	PMC0 |= 0x00003<<4;
 }
+
+/******************************************************************************
+* Function Name : void CanPinConfigC( void )
+* Description   : This function config the CAN Pin.
+* Argument      : none
+* Return Value  : none
+******************************************************************************/
+#define CAN0 1
+void CanPinConfigC(void)
+
+{
+
+#if CAN0
+	/*CAN0 Set CAN0TX as P0_0 and CAN0RX as P0_1 /
+	0010 2th output P0_0   CAN0TX
+	0011 2th input  P0_1   CAN0RX
+	*/
+
+	/*PFCEn — Port Function Control Expansion Register*/
+	PFCE0&= ~(0x03<<0);
+	/*PFCn / JPFC0 — Port Function Control Register*/
+	PFC0 |= (0x03<<0);
+	/*PMn / APMn / JPM0 — Port Mode Register
+	 * 0: Output mode (output enabled)
+	 * 1: Input mode (output disabled)*/
+	PM0 &= ~(1<<0);
+	PM0 |= 1<<1;
+	/*	PMCn / JPMC0 — Port Mode Control Register
+	 *	1: Alternative mode
+	 *	0: Port mode*/
+	PMC0 |= (0x03<<0);
+#else
+	/*CAN0 Set CAN0TX as P10_1 and CAN0RX as P10_0 /
+	0011 2th input  P10_0  CAN0RX
+	0010 2th output P10_1  CAN0TX
+	*/
+
+
+	/*PFCEn — Port Function Control Expansion Register*/
+	PFCE10&= ~(0x03<<0);
+	/*PFCn / JPFC0 — Port Function Control Register*/
+	PFC10 |= (0x03<<0);
+	/*PMn / APMn / JPM0 — Port Mode Register
+	 * 0: Output mode (output enabled)
+	 * 1: Input mode (output disabled)*/
+	PM10 |= (1<<0);
+	PM10 &= ~(1<<1);
+	/*	PMCn / JPMC0 — Port Mode Control Register
+
+	 *	1: Alternative mode
+
+	 *	0: Port mode*/
+
+	PMC10 |= (0x03<<0);
+
+
+
+#endif
+
+	/* CAN1 Set CAN1TX as P10_7 and CAN1RX as P10_6
+
+	 *0110 4th output P10_7  CAN1TX
+
+	 *0111 4th input  P10_6  CAN1RX */
+
+
+
+	/*PFCEn — Port Function Control Expansion Register*/
+
+	PFCE10 |= (0x03<<6);
+
+	/*PFCn / JPFC0 — Port Function Control Register*/
+
+	PFC10  |= (0x03<<6);
+
+	/*PMn / APMn / JPM0 — Port Mode Register
+
+	 * 0: Output mode (output enabled)
+
+	 * 1: Input mode (output disabled)*/
+
+	PM10 &= ~(1<<7);
+
+	PM10 |= 1<<6;
+
+	/*	PMCn / JPMC0 — Port Mode Control Register
+
+	 *	1: Alternative mode
+
+	 *	0: Port mode*/
+
+	PMC10  |= (0x03<<6);
+
+
+
+
+
+
+
+	/* CAN2 Set CAN2TX as P0_4 and CAN2RX as P0_5
+
+	 * 0000 1st output P0_4   CAN2TX
+
+         * 0001 1st input  P0_5   CAN2RX */
+
+
+
+	/*PFCEn — Port Function Control Expansion Register*/
+
+	PFCE0&= ~(0x00003<<4);
+
+	/*PFCn / JPFC0 — Port Function Control Register*/
+
+	PFC0 &= ~(0x00003<<4);
+
+	/*PMn / APMn / JPM0 — Port Mode Register
+
+	 * 0: Output mode (output enabled)
+
+	 * 1: Input mode (output disabled)*/
+
+	PM0 &= ~(1<<4);
+
+	PM0 |= 1<<5;
+
+	/*	PMCn / JPMC0 — Port Mode Control Register
+
+	 *	1: Alternative mode
+
+	 *	0: Port mode*/
+
+	PMC0 |= 0x00003<<4;
+
+}
 /*****************************************************************************
 ** Function:    RS_CAN_init
 ** Description: Configures the CAN0/CAN1 macros
@@ -162,7 +358,7 @@ void RS_CAN_init(void)
     PM9 &= ~(1<<4);
     P9 &= ~(1<<4);    //First disabled
     
-    CanPinConfig();
+    CanPinConfigC();
         
     /* Wait while CAN RAM initialization is ongoing */
     while((RSCAN0.GSTS.UINT32 & 0x00000008)) ;
@@ -171,7 +367,7 @@ void RS_CAN_init(void)
     RSCAN0.GCTR.UINT32 &= 0xfffffffb;	//set the 3rd bit to 0 -- global stop mdoe  
     RSCAN0.C0CTR.UINT32 &= 0xfffffffb;
     RSCAN0.C1CTR.UINT32 &= 0xfffffffb;
-		RSCAN0.C2CTR.UINT32 &= 0xfffffffb;
+    RSCAN0.C2CTR.UINT32 &= 0xfffffffb;
 
     /* Configure clk_xincan as CAN-ClockSource */
     RSCAN0.GCFG.UINT32 = 0x00000010;
@@ -183,7 +379,7 @@ void RS_CAN_init(void)
 
     RSCAN0.C1CFG.UINT32 = 0x023a0001; //SJW =3TQ, TSEG1=11TQ, TSEG2=4TQ, BRP=1
 
-		RSCAN0.C2CFG.UINT32 = 0x023a0001; //SJW =3TQ, TSEG1=11TQ, TSEG2=4TQ, BRP=1
+    RSCAN0.C2CFG.UINT32 = 0x023a0001; //SJW =3TQ, TSEG1=11TQ, TSEG2=4TQ, BRP=1
 		
     /* ==== Rx rule setting ==== */
     Can_SetRxRule();

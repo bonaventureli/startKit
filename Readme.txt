@@ -41,4 +41,5 @@ version:0.1
 CAN0测试收发数据正常
 UART测试收发数据正常
 version :0.2
+增加CanPinConfigC接口，没有测试
 
