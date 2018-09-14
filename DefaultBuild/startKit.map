@@ -1,4 +1,4 @@
-Renesas Optimizing Linker (V2.06.00 )             07-Sep-2018 15:57:10
+Renesas Optimizing Linker (V2.06.00 )             14-Sep-2018 18:03:49
 
 *** Options ***
 
@@ -14,9 +14,6 @@ Renesas Optimizing Linker (V2.06.00 )             07-Sep-2018 15:57:10
 -input=DefaultBuild\LinTask.obj
 -input=DefaultBuild\BspDataFlash.obj
 -input=DefaultBuild\BspTimer.obj
--input=DefaultBuild\can_table.obj
--input=DefaultBuild\Mslcan.obj
--input=DefaultBuild\rscan.obj
 -input=DefaultBuild\Kit1.obj
 -input=DefaultBuild\Uart33.obj
 -input=DefaultBuild\BspWatchDog.obj
@@ -25,13 +22,16 @@ Renesas Optimizing Linker (V2.06.00 )             07-Sep-2018 15:57:10
 -input=DefaultBuild\cstart.obj
 -input=DefaultBuild\r_clock.obj
 -input=DefaultBuild\r_interrupt.obj
--input=DefaultBuild\Bllcan.obj
 -input=DefaultBuild\UserSys.obj
 -input=DefaultBuild\Uart30.obj
 -input=DefaultBuild\TaskCAN.obj
 -input=DefaultBuild\TaskUART.obj
 -input=DefaultBuild\TaskTIME.obj
 -input=DefaultBuild\TaskOSTIME.obj
+-input=DefaultBuild\soft.obj
+-input=DefaultBuild\MslATMode.obj
+-input=DefaultBuild\MslGattMode.obj
+-input=DefaultBuild\HAL_can.obj
 -debug
 -nocompress
 -output=DefaultBuild\startKit.abs
@@ -57,18 +57,18 @@ RESET
 EIINTTBL
                                   00000200  0000067f       480   200
 .const
-                                  00008000  00008403       404   4
+                                  00008000  00008647       648   4
 .INIT_DSEC.const
-                                  00008404  0000840f         c   4
+                                  00008648  00008653         c   4
 .INIT_BSEC.const
-                                  00008410  00008417         8   4
+                                  00008654  0000865b         8   4
 .text
-                                  00008418  0000d687      5270   2
+                                  0000865c  0000e12b      5ad0   2
 .data
-                                  0000d688  0000d870       1e9   4
+                                  0000e12c  0000e450       325   4
 .data.R
-                                  fedfc000  fedfc1e8       1e9   4
+                                  fedfc000  fedfc324       325   4
 .bss
-                                  fedfc1ec  fedfcadf       8f4   4
+                                  fedfc328  fedfcceb       9c4   4
 .stack.bss
-                                  fedfcae0  fedfccdf       200   4
+                                  fedfccec  fedfceeb       200   4

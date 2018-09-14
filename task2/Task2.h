@@ -11,8 +11,6 @@ void DataUnpackHandle(uint8_t *Data,uint16_t Len);
 void DecodeATCmdTask(uint8_t* Data,uint16_t Len);
 void ExcuteATCmdTask(uint8_t Cmd);
 
-uint8_t CmdAnalyer(uint8_t* Data,uint16_t Len);
-uint8_t RssiAnalyer(uint8_t* Data,uint16_t Len);
 
 
 #endif

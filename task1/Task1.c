@@ -111,7 +111,7 @@ void Task1(void)
   /*Hardware Init*/
 	R_CLOCK_Init();                       /* Clock initialize    */
 	//RLIN3_Init(RLIN3_0);
-	RS_CAN_init();                        /* RS-CAN initialize   */
+	HAL_RS_CAN_init();                        /* RS-CAN initialize   */
 	//LIN1_EN;
 	OSTM0_INIT();						  /* OSTM0 initialize    */
 	__EI();										/*Open Interrupt*/

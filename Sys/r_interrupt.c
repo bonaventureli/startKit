@@ -79,7 +79,7 @@ void priority7_interrupt( uint32_t regEIIC_value )
 {
 	IntTimerCallback(regEIIC_value);
 	IntUart3Callback(regEIIC_value);
-	IntCANRecvCallback(regEIIC_value);
+	HAL_IntCANRecvCallback(regEIIC_value);
 	ISRWDTCallBack(regEIIC_value);
 }
 

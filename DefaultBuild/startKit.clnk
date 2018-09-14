@@ -9,9 +9,6 @@
 -input=DefaultBuild\LinTask.obj
 -input=DefaultBuild\BspDataFlash.obj
 -input=DefaultBuild\BspTimer.obj
--input=DefaultBuild\can_table.obj
--input=DefaultBuild\Mslcan.obj
--input=DefaultBuild\rscan.obj
 -input=DefaultBuild\Kit1.obj
 -input=DefaultBuild\Uart33.obj
 -input=DefaultBuild\BspWatchDog.obj
@@ -20,13 +17,16 @@
 -input=DefaultBuild\cstart.obj
 -input=DefaultBuild\r_clock.obj
 -input=DefaultBuild\r_interrupt.obj
--input=DefaultBuild\Bllcan.obj
 -input=DefaultBuild\UserSys.obj
 -input=DefaultBuild\Uart30.obj
 -input=DefaultBuild\TaskCAN.obj
 -input=DefaultBuild\TaskUART.obj
 -input=DefaultBuild\TaskTIME.obj
 -input=DefaultBuild\TaskOSTIME.obj
+-input=DefaultBuild\soft.obj
+-input=DefaultBuild\MslATMode.obj
+-input=DefaultBuild\MslGattMode.obj
+-input=DefaultBuild\HAL_can.obj
 -debug
 -nocompress
 -output=DefaultBuild\startKit.abs

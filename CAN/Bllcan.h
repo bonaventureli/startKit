@@ -1,50 +1,40 @@
 /******************************************************************************
-** Filename:    Bllcan.h
+** Filename:    Bllcan.c
 ** Description: This files is designed for the layor of CAN Bus Handle
 ** Author:  Huangtingxuan
-** Date: 2018.8.9
+** Date: 2018-09-08
+** Revise: 
 ** Copyright (c) by ShangHai Ingeek Information Technology Co.Ltd
 ******************************************************************************/
-//============================================================================
-//
-// Header file for the BLL CAN
-//
-//============================================================================
 #ifndef _BLL_CAN_H_
 #define _BLL_CAN_H_
 #include "Mslcan.h"
 
 typedef struct SignalPosition{
-	uint8_t StartByte;
-	uint8_t StartBit;
-	uint8_t BitLenth;
+	uint8_t 	StartBit;
+	uint8_t 	BitLenth;
 }T_MASK_MATRIX;  //Used to Matrix of CAN
-
-#define STATUS_FIRE_BUTTOM 		0
-#define STATUS_OIL_VOLUME  		1
-#define STATUS_DOOR				 		2
-#define STATUS_TRUNK			 		2
-#define STATUS_WINDOW			  	2
-#define STATUS_TEMPERATURN		2
-/*...*/
-/*...*/
 /*...*/
 
-static T_MASK_MATRIX MaskMatrix[] = {
-/*NUM   StartByte StartBit  VauleLen  */
-/*0*/  {2,        0,		    1,	    }, //Fire Buttom status
-/*1*/  {2,        0,		    8,	    }, //Oil volume 
-/*2*/  {2,        0,		    8,	    }, //Door status 
-/*3*/  {2,        0,		    8,	    }, //Trunk status
-/*4*/  {2,        0,		    8,	    }, //Window status
-/*5*/  {2,        0,		    8,	    }, //Temperature status 
-/*6*/  {0,        0,		    0,	    }, // 
-/*7*/  {0,        0,		    0,	    }, // 
-/*...*/                                     
-}; 
-
+/*******************************************************/
+/*list of function*/
 void BllCANPeriodTask(void);
 void BllFireJudgeHandle(T_CANDATA *RxData);
+void MslGetDoorStatus(T_CANDATA *RxData);
+void MslGetMainDoorLockStatus(T_CANDATA *RxData);
+void MslGetSubDoorLockStatus(T_CANDATA *RxData);
+void MslGetLeftBackDoorLockStatus(T_CANDATA *RxData);
+void MslGetRightBackDoorLockStatus(T_CANDATA *RxData);
+void MslGetTrunkStatus(T_CANDATA *RxData);
+void MslGetEngineCoverStatus(T_CANDATA *RxData);
+void MslGetMainDriverWindowStatus(T_CANDATA *RxData);
+void MslGetSubDriverWindowStatus(T_CANDATA *RxData);
+void MslGetLeftBackWindowStatus(T_CANDATA *RxData);
+void MslGetRightBackWindowStatus(T_CANDATA *RxData);
+void MslGetCarInsideTemperature(T_CANDATA *RxData);
+void MslGetCarOutsideTemperature(T_CANDATA *RxData);
+void MslGetSkyLightStatus(T_CANDATA *RxData);
+void MslGetCarSpeed(T_CANDATA *RxData);
 uint8_t BllGetValueCan(T_CANDATA *RxData,uint8_t Select);
 
 #endif  //_BLL_CAN_H_

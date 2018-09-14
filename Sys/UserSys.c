@@ -1,6 +1,6 @@
 #include "UserSys.h"
 
-Car_StatusType gsCarStatus;
+uint8_t gKeyStatus = 0;
 
 /******************************************************************************
 * Function Name : SetKeyStatus
@@ -10,32 +10,16 @@ Car_StatusType gsCarStatus;
 ******************************************************************************/
 void SetKeyStatus(uint8_t Value)
 {
-	gsCarStatus.IsKeyInside = Value;
+	gKeyStatus = Value;
 }
 
 /******************************************************************************
-* Function Name : GetCarStatus
+* Function Name : GetKeyStatus
 * Description   : This function is get Car Status.
 * Argument      : Item the classic
 * Return Value  : the value of Item
 ******************************************************************************/
-uint8_t GetCarStatus(uint8_t Item)
+uint8_t GetKeyStatus(void)
 {
-	uint8_t Retval;
-	
-	switch(Item)
-	{
-		case STATUS_KEY:
-			Retval = gsCarStatus.IsKeyInside;
-		break;
-		case STATUS_DOOR:
-			Retval = gsCarStatus.IsDoorOpen;
-		break;
-		case STATUS_WINDOWS:
-			Retval = gsCarStatus.IsWindowsOpen;
-		break;
-		default:
-		break;
-	}
-	return Retval;
+	return gKeyStatus;
 }

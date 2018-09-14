@@ -2,7 +2,7 @@
 
 #include "Bllcan.h"
 #include "Mslcan.h"
-//#include "BspTimer.h"
+#include "MslATMode.h"
 #include "UserSys.h"
 #include "Uart33.h"
 #include "ostm0.h"
@@ -10,33 +10,6 @@
 #include "ostm0.h"
 #include "LinTask.h"
 #include "BspWatchDog.h"
-#include    "rlin3_api.h"
-#include    "iodefine.h"
-
-#define CMD_NUM   16
-#define CMD_LEN   30
-
-const char CmdData[CMD_NUM][CMD_LEN]={
-/* BLE-->MCU CMD Sets */
-"AT+UNLOCK\r\n",           /* 1 */
-"AT+LOCK\r\n",             /* 2 */
-"AT+TRUNK_OPEN\r\n",       /* 3 */
-"AT+FIRE\r\n",             /* 4 */
-"AT+LEFT_DOOR\r\n",        /* 5 */
-"AT+RIGHT_DOOR\r\n",       /* 6 */
-"AT+FIND_CAR\r\n",         /* 7 */
-"AT+UNFIRE\r\n",           /* 8 */
-"AT+COOL_CAR\r\n",         /* 9 */
-"AT+HOT_CAR\r\n",          /* 10 */
-
-/* BLE-->MCU Status Sets */
-"AT+OPEN_SKYLIGHT\r\n",  	 /* 11 */
-"AT+CLOSE_SKYLIGHT\r\n", 	 /* 12 */
-"AT+OPEN_CARWINDOW\r\n", 	 /* 13 */
-"AT+CLOSE_CARWINDOW\r\n",	 /* 14 */
-"AT+INCAR\r\n", 					 /* 15 */
-"AT+OUTCAR\r\n",					 /* 16 */
-};
 
 uint8_t gUartRxData[STRING_UARTRX_LEN];
 
@@ -50,14 +23,6 @@ void Task2(void)
 {
   uint16_t DataLen;
 	char Start[] = "Enter AT+ Mode ...\r\n";
-	  /*Hardware Init*/
-	R_CLOCK_Init();                       /* Clock initialize    */
-	//RLIN3_Init(RLIN3_0);
-	RS_CAN_init();                        /* RS-CAN initialize   */
-	//LIN1_EN;
-	OSTM0_INIT();						  /* OSTM0 initialize    */
-	__EI();										/*Open Interrupt*/
-	OSTM0_START(); 						/* OSTM0 start    */
 	
 	R_WDT_Init();
 	RLIN33_init();
@@ -88,8 +53,8 @@ void Task2(void)
 ******************************************************************************/
 void DataUnpackHandle(uint8_t *Data,uint16_t Len)
 {
-	uint16_t Temp,ATCmdLen;
-	uint16_t UnReadLen = Len;
+	uint16_t Temp,IsHeader;
+	volatile uint16_t ATCmdLen,UnReadLen = Len;
 	uint16_t StartByte = 0,EndByte = 0;
 	
 	/*Ergodic the data of Uart received */
@@ -104,6 +69,8 @@ void DataUnpackHandle(uint8_t *Data,uint16_t Len)
 					if(Data[Temp+2]==0x2B)  //"+"
 					{
 						StartByte = Temp;
+						IsHeader = 1;
+						__nop();
 					}
 				}
 			}
@@ -112,20 +79,29 @@ void DataUnpackHandle(uint8_t *Data,uint16_t Len)
 				if(Data[Temp+1]==0x0A)	//"\n"
 				{
 					EndByte = Temp+1;
-					break;
+					if(IsHeader)
+					{
+						IsHeader = 0;
+						/*Caculate the lenth of AT+ command */
+						ATCmdLen = EndByte - StartByte + 1;	
+						/*Excute AT+ command */
+						DecodeATCmdTask(&Data[StartByte],ATCmdLen);
+						break;
+					}
+					else
+					{
+						__nop();
+					}
 				}
 			}
 		}
+		UnReadLen = Len - StartByte - ATCmdLen;
+		
 		/*No data need to read */
 		if(Temp > Len-2)
 		{
 			UnReadLen = 0;
 		}
-		/*Caculate the lenth of AT+ command */
-		ATCmdLen = EndByte - StartByte + 1;
-		UnReadLen = Len - EndByte - 1;
-		/*Excute AT+ command */
-		DecodeATCmdTask(&Data[StartByte],ATCmdLen);
 	}
 	/*Clear RXBuff*/
 	memset(gUartRxData,0,STRING_UARTRX_LEN);
@@ -140,7 +116,7 @@ void DataUnpackHandle(uint8_t *Data,uint16_t Len)
 void DecodeATCmdTask(uint8_t* Data,uint16_t Len)
 {
 	uint8_t Cmd;
-	if(Len < 5)
+	if(Len > 5)
 	{
 		Cmd = CmdAnalyer(Data,Len);
 		if(Cmd < CMD_NUM - 1)
@@ -152,49 +128,6 @@ void DecodeATCmdTask(uint8_t* Data,uint16_t Len)
 }
 
 /*****************************************************************************
-** Function:    CmdAnalyer
-** Description: decode the uart command
-** Parameter:   Data- data point  Len- data lenth
-** Return:      decode result
-******************************************************************************/
-uint8_t CmdAnalyer(uint8_t* Data,uint16_t Len)
-{
-	uint8_t Temp;
-	uint16_t DataSame;
-	
-	for(Temp=0;Temp<CMD_NUM;Temp++)
-	{
-		DataSame = Strcmp(Data,(uint8_t*)&CmdData[Temp][0],strlen(&CmdData[Temp][0]));		
-		if(DataSame == 0)
-		{
-			break;
-		}
-	}
-	Temp++;
-	return Temp;
-}
-
-/*****************************************************************************
-** Function:    RssiAnalyer
-** Description: decode the uart Rssi
-** Parameter:   Data- data point  Len- data lenth
-** Return:      decode result
-******************************************************************************/
-uint8_t RssiAnalyer(uint8_t* Data,uint16_t Len)
-{
-	uint8_t RssiValue = 0;
-	uint16_t DataSame;
-	char Rssi[] = "rssi:-";
-			
-	DataSame = Strcmp(Data,(uint8_t*)Rssi,strlen(Rssi));		
-	if(DataSame == 0)
-	{
-		RssiValue = Data[strlen(Rssi)];
-	}
-	return RssiValue;
-}
-
-/*****************************************************************************
 ** Function:    ExcuteATCmdTask
 ** Description: excute the cmd on the CAN bus
 ** Parameter:   Cmd- from decode
@@ -202,7 +135,9 @@ uint8_t RssiAnalyer(uint8_t* Data,uint16_t Len)
 ******************************************************************************/
 void ExcuteATCmdTask(uint8_t Cmd)
 {
-  switch(Cmd){
+  MslSetStatusSentTimes(2);
+	
+	switch(Cmd){
 	case 1 :
 		/*Unlock Door*/
 		MslCANCmdExecute(DOOR_UNLOCK );
@@ -242,28 +177,38 @@ void ExcuteATCmdTask(uint8_t Cmd)
 	break;
 	case 13 :
 		/*Open Windows*/
-		MslCANCmdExecute(WINDOWNS_UP);
+		MslCANCmdExecute(WINDOWNS_DOWN);
 		__nop();
 	break;
 	case 14 :
 		/*Close Windows*/
-		MslCANCmdExecute(WINDOWNS_DOWN);
+		MslCANCmdExecute(WINDOWNS_UP);
 		__nop();
 	break;
 	case 15 :
 		/*Car Inside*/
 		SetKeyStatus(1);
-		__nop();
+		if(GetFireButtom() == 1)
+		{
+			SetFireButtom(0);
+			MslCANCmdExecute(ENGINE_START);
+		}
 	break;
 	case 16 :
 		/*Car Outside*/
 		SetKeyStatus(0);
 		__nop();
 	break;
-	default :
+	case 17 :
+		/*Welcome*/
+		MslCANCmdExecute(WELCOME);
+	break;
+	case 18 :
+		/*pass verify*/
 	break;
 	
-	
+	default :
+	break;
 	}
 	
 }

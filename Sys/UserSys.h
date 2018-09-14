@@ -46,15 +46,6 @@ BOARD_DEMO
 #define   DEMOCAN													0   
 
 
-typedef struct{
-uint8_t IsKeyInside;
-uint8_t IsDoorOpen;
-uint8_t IsWindowsOpen;
-/*...*/
-
-}Car_StatusType;
-
-
 void SetKeyStatus(uint8_t Value);
 uint8_t GetCarStatus(uint8_t Item);
 
