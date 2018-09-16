@@ -30,9 +30,6 @@ typedef struct SignalPosition{
 	uint8_t 	BitLenth;
 }T_MASK_MATRIX;  //Used to Matrix of CAN
 /*...*/
-
-
-extern const can_cre_type RX_RULE_TABLE_LIST[RX_RULE_NUM];  
 #if COMPILER == COMP_GHS
   #if 1
   /* ==== basic type ==== */
@@ -64,6 +61,10 @@ extern const can_cre_type RX_RULE_TABLE_LIST[RX_RULE_NUM];
   typedef volatile unsigned long __no_bit_access VU32;
   #endif
 #endif
+
+
+extern const can_cre_type RX_RULE_TABLE_LIST[RX_RULE_NUM];  
+
 
 /* ---- CAN frame ----- */
 typedef struct
