@@ -19,8 +19,8 @@ BOARD_DEMO
 
 /*step1:  select Board*/
 #define 	BOARD_NO 										  0
-#define 	BOARD_DEVELOP									0
-#define 	BOARD_DEMO 									  1
+#define 	BOARD_DEVELOP									1
+#define 	BOARD_DEMO 									  0
 
 /*step2:	select task*/
 #define 	taskli 												0
